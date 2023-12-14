@@ -9,5 +9,5 @@ variable "clickhouse_password" {
 # }
 
 output "clickhouse_host_fqdn" {
-  value = resource.yandex_mdb_clickhouse_cluster.clickhouse_starschema.host[0].fqdn
+  value = resource.yandex_mdb_clickhouse_cluster.clickhouse_example.host[0].fqdn
 }
