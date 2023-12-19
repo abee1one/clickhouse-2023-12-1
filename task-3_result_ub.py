@@ -175,12 +175,24 @@ keyboard_listener.start()
 mouse_listener.join()
 keyboard_listener.join()
 
-# Stop
-# mouse_listener.stop()
-# keyboard_listener.stop()
+# Выполнить запросы:
+print("количество всех движений мыши")
+query = "SELECT Count(*) from mouse_movements where (deltaX + deltaY) <> 0"
+df_res = cli_conn.query_df(query)
+print(df_res)
 
+print("\nкол-во движений мыши, попадающих в диапазон x < 1000 AND y < 1000 и сгруппировать по target")
+query = "SELECT target, count(*) \
+         FROM mouse_movements \
+         WHERE x < 1000 and y < 1000 \
+         GROUP BY target"
+df_res = cli_conn.query_df(query)
+print(df_res)
 
-# %% SELECT's
+print("\nнаиболее большие движения мыши (можно посчитать с помощью дельт: plus(abs(deltaX), abs(deltaY))")
+query = "SELECT target, max(plus(abs(deltaX), abs(deltaY))) as max_delta \
+         FROM mouse_movements \
+         GROUP BY target"
+df_res = cli_conn.query_df(query)
+print(df_res)
 
-
-#
