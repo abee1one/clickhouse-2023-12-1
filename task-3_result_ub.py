@@ -150,19 +150,6 @@ query_ddl = " \
           Order By clientTimeStamp"
 cli_conn.query(query_ddl)
 
-
-""" 
--- Create a table with Buffer engine
-CREATE TABLE example_buffer_engine
-(
-    id UInt64,
-    name String,
-    value Float64
-)
-ENGINE = Buffer('example_remote_table', 'example_distribution_key', 16, 10000);    
-"""
-
-
 df_buff = create_data_frame()
 # Create listener instances
 mouse_listener = mouse.Listener(on_move=on_move, on_click=on_click, on_scroll=on_scroll)
