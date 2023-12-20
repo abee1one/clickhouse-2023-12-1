@@ -34,7 +34,7 @@ def get_current_window_title():
 
 def flush_buff(buff, buff_size):
     if buff.shape[0] >= buff_size:
-        ph.to_clickhouse(buff, "mouse_movements", connection=pdh_conn, index=False)
+        ph.to_clickhouse(buff, "mouse_movements_buffer", connection=pdh_conn, index=False)
         buff = create_data_frame()
         print(f"{buff_size} rows wrote in table")
     return buff
@@ -129,8 +129,8 @@ pdh_conn = {
 print("CurrDB:", cli_conn.database.title())
 
 # Drop table
-query = "drop table if exists mouse_movements"
-cli_conn.query(query)
+query_ddl = "drop table if exists test.mouse_movements"
+cli_conn.query(query_ddl)
 
 # Create table
 query_ddl = " \
@@ -148,6 +148,12 @@ query_ddl = " \
         target String \
         ) Engine = MergeTree \
           Order By clientTimeStamp"
+cli_conn.query(query_ddl)
+
+query_ddl = "drop table if exists test.mouse_movements_buffer"
+cli_conn.query(query_ddl)
+query_ddl = "CREATE TABLE test.mouse_movements_buffer AS test.mouse_movements \
+             ENGINE = Buffer('test', 'mouse_movements', 2, 10, 100, 1000, 10000, 100000, 1000000)"
 cli_conn.query(query_ddl)
 
 df_buff = create_data_frame()
